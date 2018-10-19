@@ -5,11 +5,11 @@ TextEditor::TextEditor(int x, int y)
 	resX(x), resY(y),
 	myDoc()
 {
-
+	drawingWindow.setVerticalSyncEnabled(true);
 }
 
 void TextEditor::draw() {
-	drawingWindow.clear();
+	drawingWindow.clear(sf::Color::Red);
 	myDoc.draw(drawingWindow);
 	//drawingWindow.draw();
 	drawingWindow.display();

@@ -1,6 +1,7 @@
 #ifndef GAPBUFFER_H_
 #define GAPBUFFER_H_
 
+#include <iostream>
 #include <vector>
 
 

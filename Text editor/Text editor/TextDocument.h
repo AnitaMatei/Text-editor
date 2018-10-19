@@ -1,15 +1,18 @@
 #ifndef TEXTDOCUMENT_H_
 #define TEXTDOCUMENT_H_
 
+#include <iostream>
 #include "SFML/Graphics.hpp"
 #include "GapBuffer.h"
+#include "Cursor.h"
 
 class TextDocument {
 
 	sf::Font font;
 	sf::Text drawableText;
 	GapBuffer gapBuffer;
-	
+
+	Cursor cursor;
 
 
 public:

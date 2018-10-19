@@ -16,7 +16,16 @@ void GapBuffer :: createGap() {
 }
 
 void GapBuffer::insertText(char text) {
-	buffer[preLength] = text;
+	if (text == 13)
+		//if the unicode is 13(enter), we have to create a new line with \n
+		buffer[preLength] = '\n';
+	else if (text == 8)
+	{//if the unicode is 8(backspace), we delete the character rather than adding it
+		deleteText();
+		return;
+	}
+	else buffer[preLength] = text;
+	
 	preLength++;
 }
 
@@ -30,6 +39,9 @@ void GapBuffer::moveGap(int direction) {
 	
 	if (direction<0) {
 		//if we move the gap backwards, we start copying the text from pos until the gap starts at the end of the gap
+		if (preLength == 0)
+			return;
+
 		direction *= -1;
 
 		for (int i = 1; i <= direction; i++) {
@@ -42,7 +54,9 @@ void GapBuffer::moveGap(int direction) {
 	}
 	else {
 		//if we move the gap forward, the text is copied to the beginning of the gap and initial position replaced with the buffer
-		
+		if (postLength == 0)
+			return;
+
 		for (int i = 0; i < direction; i++) {
 			buffer[preLength + i] = buffer[preLength + gapLength + i];
 			buffer[preLength + gapLength + i] = ' ';
