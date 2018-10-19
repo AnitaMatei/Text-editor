@@ -11,16 +11,9 @@ void Cursor::draw(sf::RenderWindow &drawingWindow) {
 	drawingWindow.draw(drawableBody);
 }
 
-void Cursor::update() {
-	drawableBody.setPosition(10 * position.x, 21 * position.y);
+void Cursor::update(sf::Vector2f position) {
+	drawableBody.setPosition(position.x, position.y);
 }
 
 void Cursor::checkInput(sf::Event &sfmlEvent) {
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Left)) {
-		if (position.x > 0)
-			position.x--;
-	}
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right)) {
-		position.x++;
-	}
 }

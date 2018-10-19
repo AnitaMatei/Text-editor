@@ -18,10 +18,13 @@ void GapBuffer :: createGap() {
 void GapBuffer::insertText(char text) {
 	if (text == 13)
 		//if the unicode is 13(enter), we have to create a new line with \n
+	{
 		buffer[preLength] = '\n';
-	else if (text == 8)
-	{//if the unicode is 8(backspace), we delete the character rather than adding it
-		deleteText();
+	}
+	else if (text == 8) {
+	//if the unicode is 8(backspace), we delete the character rather than adding it
+		if (preLength > 0)
+			deleteText();
 		return;
 	}
 	else buffer[preLength] = text;
@@ -81,4 +84,23 @@ std::string GapBuffer::getText() {
 	}
 
 	return tempText;
+}
+
+sf::Vector2i GapBuffer::getCursorPosition() {
+	sf::Vector2i pos(0,0);
+
+	for (int i = preLength - 1; i >= 0; i--) {
+		//the x represents the column, so the number of character between the last line and the gap buffer
+		if (buffer[i] == '\n')
+			break;
+		pos.x ++;
+	}
+
+	for (int i = 0; i < preLength; i++) {
+		//the y represents the number of lines, so how many '\n' chars there were
+		if (buffer[i] == '\n')
+			pos.y++;
+	}
+
+	return pos;
 }

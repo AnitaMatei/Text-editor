@@ -1,22 +1,22 @@
 #ifndef CURSOR_H_
 #define CURSOR_H_
 
+#include <iostream>
 #include "SFML/Graphics.hpp"
 
 class Cursor {
 
 	sf::RectangleShape drawableBody;
-	sf::Vector2i position;
-	//the position in the text, [line;column]
 
 
 public:
 	Cursor();
 
 	void draw(sf::RenderWindow&);
-	void update();
+	void update(sf::Vector2f);
+	//the argument represents the position where the cursor should be placed
 	void checkInput(sf::Event&);
-
+	
 };
 
 

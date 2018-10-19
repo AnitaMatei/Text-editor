@@ -9,20 +9,18 @@ TextDocument::TextDocument()
 	drawableText.setFillColor(sf::Color::Yellow);
 	drawableText.setCharacterSize(21);
 
-
 }
 
 void TextDocument::draw(sf::RenderWindow &drawingWindow) {
-	cursor.draw(drawingWindow);
-	
 	drawingWindow.draw(drawableText);
-	
+
+	cursor.draw(drawingWindow);
 }
 
 void TextDocument::update() {
-	cursor.update();
-
 	drawableText.setString(gapBuffer.getText());
+	
+	cursor.update(drawableText.findCharacterPos(gapBuffer.getPreLength()));
 }
 
 void TextDocument::checkInput(sf::Event &sfmlEvent) {

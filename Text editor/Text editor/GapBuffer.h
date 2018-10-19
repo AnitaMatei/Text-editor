@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <vector>
+#include <SFML/Graphics.hpp>
 
 
 class GapBuffer {
@@ -25,6 +26,10 @@ public:
 	//it moves the gap backward or forward; -x to move x spaces backward, x to move x spaces forward 
 	std::string getText();
 	//returns a string of the character in the buffer
+	sf::Vector2i getCursorPosition();
+	//returns the start of the gapBuffer, where the cursor would be
+	
+	int getPreLength() { return preLength; }
 
 
 };
