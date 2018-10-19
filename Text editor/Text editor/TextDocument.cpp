@@ -23,4 +23,7 @@ void TextDocument::checkInput(sf::Event &sfmlEvent) {
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Left)) {
 		gapBuffer.moveGap(-1);
 	}
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right)) {
+		gapBuffer.moveGap(1);
+	}
 }

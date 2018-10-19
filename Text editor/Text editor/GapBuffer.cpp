@@ -32,12 +32,12 @@ void GapBuffer::moveGap(int direction) {
 		//if we move the gap backwards, we start copying the text from pos until the gap starts at the end of the gap
 		direction *= -1;
 
-		for (int i = 0; i < direction; i++) {
-			buffer[gapLength + preLength - i-1] = buffer[preLength-i];
+		for (int i = 1; i <= direction; i++) {
+			buffer[gapLength + preLength - 1] = buffer[preLength-i];
 			buffer[preLength - i] = ' ';
 		}
 
-		postLength += preLength - direction;
+		postLength += direction;
 		preLength -= direction;
 	}
 	else {
