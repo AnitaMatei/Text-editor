@@ -42,10 +42,14 @@ void GapBuffer::moveGap(int direction) {
 	
 	if (direction<0) {
 		//if we move the gap backwards, we start copying the text from pos until the gap starts at the end of the gap
+
+		direction *= -1;
+
 		if (preLength == 0)
 			return;
 
-		direction *= -1;
+		if (preLength - direction <= 0)
+			direction = preLength;
 
 		for (int i = 1; i <= direction; i++) {
 			buffer[gapLength + preLength - i] = buffer[preLength-i];
@@ -109,20 +113,30 @@ void GapBuffer::moveGapUp() {
 	//we go back until we hit 2 '\n' or the start of the text
 	//the gap is moved x amount of characters from the 2nd '\n', where x is how many character there are on the current line
 
-	int endlAppearances = 0, i, charsCurrLine=0;
+	int endlAppearances = 0, i, charsCurrLine=0, direction=0;
 		
 
 
 	for (i = preLength - 1; i > 0; i--) {
-		if (buffer[i] == '\n' || i-1==0)
+		if (buffer[i] == '\n')
 			endlAppearances++;
+		else if (i - 1 == 0)
+		{
+			if (endlAppearances == 1)
+			{
+				direction -= charsCurrLine;
+				std::cout << charsCurrLine << std::endl;
+				break;
+			}
+		}
 		if (endlAppearances == 0)
 			charsCurrLine++;
 		if (endlAppearances == 2)
 			break;
 	}
 
-	if (endlAppearances == 2)
-		moveGap(-(preLength - i + 1+charsCurrLine));
+	direction += preLength - i + 1;
+
+	moveGap(-direction);
 
 }
