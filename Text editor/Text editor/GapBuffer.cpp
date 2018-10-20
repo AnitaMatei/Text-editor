@@ -48,7 +48,7 @@ void GapBuffer::moveGap(int direction) {
 		direction *= -1;
 
 		for (int i = 1; i <= direction; i++) {
-			buffer[gapLength + preLength - 1] = buffer[preLength-i];
+			buffer[gapLength + preLength - i] = buffer[preLength-i];
 			buffer[preLength - i] = ' ';
 		}
 
@@ -86,7 +86,7 @@ std::string GapBuffer::getText() {
 	return tempText;
 }
 
-sf::Vector2i GapBuffer::getCursorPosition() {
+sf::Vector2i GapBuffer::getGapPosition() {
 	sf::Vector2i pos(0,0);
 
 	for (int i = preLength - 1; i >= 0; i--) {
@@ -103,4 +103,26 @@ sf::Vector2i GapBuffer::getCursorPosition() {
 	}
 
 	return pos;
+}
+
+void GapBuffer::moveGapUp() {
+	//we go back until we hit 2 '\n' or the start of the text
+	//the gap is moved x amount of characters from the 2nd '\n', where x is how many character there are on the current line
+
+	int endlAppearances = 0, i, charsCurrLine=0;
+		
+
+
+	for (i = preLength - 1; i > 0; i--) {
+		if (buffer[i] == '\n' || i-1==0)
+			endlAppearances++;
+		if (endlAppearances == 0)
+			charsCurrLine++;
+		if (endlAppearances == 2)
+			break;
+	}
+
+	if (endlAppearances == 2)
+		moveGap(-(preLength - i + 1+charsCurrLine));
+
 }

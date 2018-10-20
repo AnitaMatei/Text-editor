@@ -9,7 +9,7 @@ TextEditor::TextEditor(int x, int y)
 }
 
 void TextEditor::draw() {
-	drawingWindow.clear(sf::Color::Red);
+	drawingWindow.clear(sf::Color(38,38,38));
 	myDoc.draw(drawingWindow);
 	//drawingWindow.draw();
 	drawingWindow.display();
@@ -26,6 +26,13 @@ void TextEditor::checkInput() {
 			sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Escape))
 			drawingWindow.close();
 		//the window closes if you press X or escape key
+		
+		if (sfmlEvent.type == sf::Event::Resized)
+		{
+			sf::FloatRect visibleArea(0, 0, sfmlEvent.size.width, sfmlEvent.size.height);
+			drawingWindow.setView(sf::View(visibleArea));
+		}
+
 		myDoc.checkInput(sfmlEvent);
 	
 	}	
