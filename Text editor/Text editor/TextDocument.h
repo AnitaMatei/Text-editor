@@ -5,6 +5,7 @@
 #include "SFML/Graphics.hpp"
 #include "GapBuffer.h"
 #include "Cursor.h"
+#include <fstream>
 
 class TextDocument {
 
@@ -14,6 +15,7 @@ class TextDocument {
 
 	Cursor cursor;
 
+	void saveToFile(std::string);
 
 public:
 	TextDocument();
@@ -21,6 +23,7 @@ public:
 	void draw(sf::RenderWindow&);
 	void update();
 	void checkInput(sf::Event&);
+
 
 };
 
