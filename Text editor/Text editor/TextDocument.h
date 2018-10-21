@@ -23,6 +23,7 @@ public:
 	void draw(sf::RenderWindow&);
 	void update();
 	void checkInput(sf::Event&);
+	void openFile(std::string);
 
 
 };

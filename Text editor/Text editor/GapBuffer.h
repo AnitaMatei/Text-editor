@@ -25,10 +25,12 @@ public:
 	void moveGap(int);
 	//it moves the gap backward or forward; -x to move x spaces backward, x to move x spaces forward 
 	void moveGapUp();
+	void moveGapDown();
 	std::string getText();
 	//returns a string of the character in the buffer
 	sf::Vector2i getGapPosition();
 	//returns the start of the gapBuffer, where the cursor would be
+	void setText(std::string);
 	
 	int getPreLength() { return preLength; }
 

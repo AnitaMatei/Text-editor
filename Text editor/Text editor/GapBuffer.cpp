@@ -2,10 +2,12 @@
 
 GapBuffer::GapBuffer() {
 	gapMaxLength = 2048;
-	createGap();
 	preLength = 0;
 	//the cursor is placed at the beginning at first;
+	createGap();
+
 	postLength = 0;
+	//buffer.push_back('\0');
 }
 
 void GapBuffer :: createGap() {
@@ -64,6 +66,7 @@ void GapBuffer::moveGap(int direction) {
 		if (postLength == 0)
 			return;
 
+
 		for (int i = 0; i < direction; i++) {
 			buffer[preLength + i] = buffer[preLength + gapLength + i];
 			buffer[preLength + gapLength + i] = ' ';
@@ -113,30 +116,97 @@ void GapBuffer::moveGapUp() {
 	//we go back until we hit 2 '\n' or the start of the text
 	//the gap is moved x amount of characters from the 2nd '\n', where x is how many character there are on the current line
 
-	int endlAppearances = 0, i, charsCurrLine=0, direction=0;
-		
+	int endlAppearances = 0, charsCurrLine=0, charsPrevLine=0, direction=0;
+	bool keepGoing = true;
 
 
-	for (i = preLength - 1; i > 0; i--) {
+	for (int i = preLength - 1; i > 0 && keepGoing; i--) {
+		//if we encountered an endline, we check wether the next character is the beginning of the text or another endline
+		//if its another endline, we have to deduct the number of characters by 1
+
 		if (buffer[i] == '\n')
 			endlAppearances++;
-		else if (i - 1 == 0)
-		{
-			if (endlAppearances == 1)
-			{
-				direction -= charsCurrLine;
-				std::cout << charsCurrLine << std::endl;
-				break;
-			}
-		}
-		if (endlAppearances == 0)
+		switch (endlAppearances) {
+		case 0:
+			//if we havent encountered any endlines, we keep counting how many chars there are on the current line
 			charsCurrLine++;
-		if (endlAppearances == 2)
 			break;
+		case 1:
+			//if we've already encountered one endline, we make sure the next character isnt the end and keep counting the 
+			//characters on the previous line
+
+			if (i - 1 > 0 && buffer[i-1]!='\n')
+				charsPrevLine++;
+			else {
+				if (buffer[i - 1] == '\n')
+					charsPrevLine--;
+				keepGoing = false;
+			}
+			break;
+		}
 	}
 
-	direction += preLength - i + 1;
+	if (charsCurrLine > charsPrevLine)
+		direction = charsCurrLine + 1;
+	else direction = charsPrevLine + 2;
+	//if there are more chars on the current line than the previous one, we go to the last char on the previous line
+	//otherwise, we move the gap charsCurrLine+charsPrevLine-charsCurrLine +2 = charsCurrLine + 2
 
 	moveGap(-direction);
+}
 
+void GapBuffer::moveGapDown() {
+	//functions similar to the moveGapUp function, only now we need to know how many characters there are both on left and right
+	//of the gap
+
+	int charsCurrLineLeft = 0, charsCurrLineRight = 0, charsNextLine = 0, direction = 0, endlAppearances = 0;
+	bool keepGoing = true;
+
+	for (int i = preLength - 1; i >= 0;i--) {
+		charsCurrLineLeft++;
+
+		if (i - 1 == 0 && buffer[i - 1] == '\n')
+		{
+			break;
+		}
+	}
+	for (int i = buffer.size() - postLength; i < buffer.size() && keepGoing; i++) {
+		if (buffer[i] == '\n')
+			endlAppearances++;
+		switch (endlAppearances) {
+		case 0:
+			charsCurrLineRight++;
+			break;
+		case 1:
+
+			if (i + 1 < buffer.size() && buffer[i + 1] != '\n')
+				charsNextLine++;
+			else {
+				keepGoing = false;
+			}
+			break;
+		}
+	}
+
+	if (charsCurrLineLeft >= charsNextLine) {
+		direction = charsCurrLineRight + charsNextLine + 1;
+		
+
+	}
+	else {
+		direction = charsCurrLineRight + charsCurrLineLeft + 1;
+	}
+
+	moveGap(direction);
+
+}
+
+void GapBuffer::setText(std::string text) {
+
+
+	for (int i = 0; i < text.size(); i++)
+	{
+		buffer.insert(buffer.begin()+i+gapMaxLength,text[i]);
+	}
+	postLength += text.size();
 }

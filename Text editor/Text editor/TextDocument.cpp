@@ -4,7 +4,7 @@ TextDocument::TextDocument()
 	:gapBuffer(),
 	cursor()
 {
-	font.loadFromFile("Fonts/arial.ttf");
+	font.loadFromFile("Fonts/VeraMono.ttf");
 	drawableText.setFont(font);
 	drawableText.setFillColor(sf::Color::White);
 	drawableText.setCharacterSize(21);
@@ -40,6 +40,9 @@ void TextDocument::checkInput(sf::Event &sfmlEvent) {
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Up))	{
 		gapBuffer.moveGapUp();
 	}
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Down)) {
+		gapBuffer.moveGapDown();
+	}
 }
 
 void TextDocument::saveToFile(std::string fileName) {
@@ -50,4 +53,16 @@ void TextDocument::saveToFile(std::string fileName) {
 		fout << text[i];
 	}
 	fout.close();
+}
+
+void TextDocument::openFile(std::string fileName) {
+	std::string text;
+	std::ifstream fin(fileName);
+	int i = 0;
+	while (!fin.eof()) {
+		fin >> text;
+	}
+
+	gapBuffer.setText(text);
+	fin.close();
 }

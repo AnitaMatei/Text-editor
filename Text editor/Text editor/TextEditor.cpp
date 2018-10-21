@@ -6,6 +6,7 @@ TextEditor::TextEditor(int x, int y)
 	myDoc()
 {
 	drawingWindow.setVerticalSyncEnabled(true);
+	//myDoc.openFile("text.txt");
 }
 
 void TextEditor::draw() {
