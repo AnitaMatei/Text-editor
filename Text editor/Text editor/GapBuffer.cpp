@@ -156,19 +156,18 @@ void GapBuffer::moveGapUp() {
 }
 
 void GapBuffer::moveGapDown() {
-	//functions similar to the moveGapUp function, only now we need to know how many characters there are both on left and right
-	//of the gap
+	//functions similar to the moveGapUp function, only now we need to know how many characters there are both on left and right of the gap
 
 	int charsCurrLineLeft = 0, charsCurrLineRight = 0, charsNextLine = 0, direction = 0, endlAppearances = 0;
 	bool keepGoing = true;
 
-	for (int i = preLength - 1; i >= 0;i--) {
-		charsCurrLineLeft++;
-
-		if (i - 1 == 0 && buffer[i - 1] == '\n')
+	for (int i = preLength; i > 0;i--) {
+		if (buffer[i - 1] == 0 || buffer[i - 1] == '\n')
 		{
 			break;
 		}
+
+		charsCurrLineLeft++;
 	}
 	for (int i = buffer.size() - postLength; i < buffer.size() && keepGoing; i++) {
 		if (buffer[i] == '\n')
@@ -178,7 +177,6 @@ void GapBuffer::moveGapDown() {
 			charsCurrLineRight++;
 			break;
 		case 1:
-
 			if (i + 1 < buffer.size() && buffer[i + 1] != '\n')
 				charsNextLine++;
 			else {
@@ -189,9 +187,11 @@ void GapBuffer::moveGapDown() {
 	}
 
 	if (charsCurrLineLeft >= charsNextLine) {
-		direction = charsCurrLineRight + charsNextLine + 1;
-		
+		direction = charsCurrLineRight + charsNextLine;
 
+		if (charsNextLine != 0)
+			direction++;
+		//when we're not on the last line, we have to go one character further because of \n
 	}
 	else {
 		direction = charsCurrLineRight + charsCurrLineLeft + 1;
