@@ -124,6 +124,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Cursor.cpp" />
+    <ClCompile Include="Gui.cpp" />
     <ClCompile Include="TextDocument.cpp" />
     <ClCompile Include="GapBuffer.cpp" />
     <ClCompile Include="Source.cpp" />
@@ -131,6 +132,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Cursor.h" />
+    <ClInclude Include="Gui.h" />
+    <ClInclude Include="ResourceHandler.h" />
     <ClInclude Include="TextDocument.h" />
     <ClInclude Include="GapBuffer.h" />
     <ClInclude Include="TextEditor.h" />

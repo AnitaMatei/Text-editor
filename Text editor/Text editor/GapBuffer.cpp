@@ -18,19 +18,8 @@ void GapBuffer :: createGap() {
 }
 
 void GapBuffer::insertText(char text) {
-	if (text == 13)
-		//if the unicode is 13(enter), we have to create a new line with \n
-	{
-		buffer[preLength] = '\n';
-	}
-	else if (text == 8) {
-	//if the unicode is 8(backspace), we delete the character rather than adding it
-		if (preLength > 0)
-			deleteText();
-		return;
-	}
-	else buffer[preLength] = text;
 	
+	buffer[preLength] = text;
 	preLength++;
 }
 
@@ -209,4 +198,32 @@ void GapBuffer::setText(std::string text) {
 		buffer.insert(buffer.begin()+i+gapMaxLength,text[i]);
 	}
 	postLength += text.size();
+}
+
+int GapBuffer::getCurrLine() {
+	int lines = 0;
+	for (int i = 0; i < preLength; i++) {
+		if (buffer[i] == '\n')
+			lines++;
+	}
+	return lines;
+}
+
+int GapBuffer::getFirstCharOnLine(int thisLine) {
+	int lines = 0, i = 0;
+	while (lines < thisLine) {
+		if (buffer[i] == '\n')
+			lines++;
+		i++;
+	}
+	return i;
+}
+
+GapBuffer GapBuffer::operator=(GapBuffer& gp) {
+	preLength = gp.preLength;
+	postLength = gp.postLength;
+	gapMaxLength = gp.gapMaxLength;
+	buffer = gp.buffer;
+
+	return *this;
 }

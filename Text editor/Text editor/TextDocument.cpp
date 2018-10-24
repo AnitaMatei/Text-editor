@@ -1,35 +1,42 @@
 #include "TextDocument.h"
 
-TextDocument::TextDocument() 
+TextDocument::TextDocument(sf::RenderWindow& drawingWindow) 
 	:gapBuffer(),
-	cursor()
+	cursor(),
+	gui(drawingWindow.getSize()),
+	sndGapBuffer()
 {
 	font.loadFromFile("Fonts/VeraMono.ttf");
 	drawableText.setFont(font);
 	drawableText.setFillColor(sf::Color::White);
-	drawableText.setCharacterSize(21);
+	drawableText.setCharacterSize(12);
+	drawableText.setPosition(sf::Vector2f(0, 15));
+	this->screenResolution = screenResolution;
+	highlightedText = false;
 
+	pDrawingWindow = &drawingWindow;
 }
 
-void TextDocument::draw(sf::RenderWindow &drawingWindow) {
-	drawingWindow.draw(drawableText);
-
-	cursor.draw(drawingWindow);
+void TextDocument::draw(sf::RenderTarget& target, sf::RenderStates state) const {
+	target.draw(drawableText);
+	target.draw(gui);
+	target.draw(cursor);
 }
 
-void TextDocument::update() {
+void TextDocument::update(float deltaTime) {
 	drawableText.setString(gapBuffer.getText());
-	
-	cursor.update(drawableText.findCharacterPos(gapBuffer.getPreLength()),gapBuffer.getGapPosition());
+
+	cursor.update(drawableText.findCharacterPos(gapBuffer.getPreLength()),gapBuffer.getGapPosition(),deltaTime);
 }
 
 void TextDocument::checkInput(sf::Event &sfmlEvent) {
 
 	cursor.checkInput(sfmlEvent);
+	handleGuiInput(sfmlEvent);
+
 	if (sfmlEvent.type == sf::Event::TextEntered) {
-		if (sfmlEvent.text.unicode == 19)
-			saveToFile("file.txt");
-		else gapBuffer.insertText(sfmlEvent.text.unicode);	
+		if (handleKeyCombinations(sfmlEvent))
+			gapBuffer.insertText(sfmlEvent.text.unicode);	
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Left)) {
 		gapBuffer.moveGap(-1);
@@ -65,4 +72,32 @@ void TextDocument::openFile(std::string fileName) {
 
 	gapBuffer.setText(text);
 	fin.close();
+}
+
+bool TextDocument::handleKeyCombinations(sf::Event &sfmlEvent) {
+	switch (sfmlEvent.text.unicode) {
+	case 19:
+		saveToFile("file.txt");
+		break;
+	case 13:
+		gapBuffer.insertText('\n');
+		break;
+	case 8:
+		gapBuffer.deleteText();
+		break;
+	default:
+		return true;
+		break;
+	}
+	return false;
+}
+
+void TextDocument::handleGuiInput(sf::Event& sfmlEvent) {
+	switch (gui.checkInput(sfmlEvent,*pDrawingWindow)) {
+	case 2:
+		saveToFile("file.txt");
+		break;
+	default:
+		break;
+	}
 }

@@ -3,7 +3,7 @@
 TextEditor::TextEditor(int x, int y) 
 	: drawingWindow(sf::VideoMode(x,y),"Text Editor"),
 	resX(x), resY(y),
-	myDoc()
+	myDoc(drawingWindow)
 {
 	drawingWindow.setVerticalSyncEnabled(true);
 	//myDoc.openFile("text.txt");
@@ -11,13 +11,13 @@ TextEditor::TextEditor(int x, int y)
 
 void TextEditor::draw() {
 	drawingWindow.clear(sf::Color(38,38,38));
-	myDoc.draw(drawingWindow);
-	//drawingWindow.draw();
+	drawingWindow.draw(myDoc);
 	drawingWindow.display();
+
 }
 
 void TextEditor::update() {
-	myDoc.update();
+	myDoc.update(time.asSeconds());
 }
 
 void TextEditor::checkInput() {
@@ -40,13 +40,18 @@ void TextEditor::checkInput() {
 }
 
 void TextEditor::start() {
+	sf::Clock clock;
+
 
 	while (drawingWindow.isOpen()) {
+		time=clock.restart();
+
 		checkInput();
 
 		update();
 
 		draw();
+
 	}
 
 

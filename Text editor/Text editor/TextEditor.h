@@ -10,6 +10,8 @@ class TextEditor {
 	sf::RenderWindow drawingWindow;
 	sf::Event sfmlEvent;
 	int resX, resY;
+	sf::Time time;
+	//time variable to get the delta time
 
 	TextDocument myDoc;
 

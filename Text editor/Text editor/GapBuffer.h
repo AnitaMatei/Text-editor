@@ -7,7 +7,7 @@
 
 
 class GapBuffer {
-	//gap buffer data structure to store text
+	//gap buffer data structure implemented specifically to store text
 
 	std::vector<char> buffer;
 	//the vector where the text itself will be held
@@ -31,7 +31,13 @@ public:
 	sf::Vector2i getGapPosition();
 	//returns the start of the gapBuffer, where the cursor would be
 	void setText(std::string);
-	
+	int getCurrLine();
+	//returns the line the gap currently is on, starting from 0
+	int getFirstCharOnLine(int);
+	//returns the index of the first char on a particular line
+
+	GapBuffer operator=(GapBuffer&);
+
 	int getPreLength() { return preLength; }
 
 
