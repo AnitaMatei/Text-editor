@@ -1,18 +1,17 @@
 #include "TextDocument.h"
 
-TextDocument::TextDocument(sf::RenderWindow& drawingWindow) 
+TextDocument::TextDocument(sf::RenderWindow& drawingWindow)
 	:gapBuffer(),
 	cursor(),
 	gui(drawingWindow.getSize()),
-	sndGapBuffer()
+	sndGapBuffer(),
+	keysPressed(5)
 {
 	font.loadFromFile("Fonts/VeraMono.ttf");
 	drawableText.setFont(font);
 	drawableText.setFillColor(sf::Color::White);
-	drawableText.setCharacterSize(12);
-	drawableText.setPosition(sf::Vector2f(0, 15));
-	this->screenResolution = screenResolution;
-	highlightedText = false;
+	drawableText.setCharacterSize(15);
+	drawableText.setPosition(sf::Vector2f(0, 25));
 
 	pDrawingWindow = &drawingWindow;
 }
@@ -33,51 +32,74 @@ void TextDocument::checkInput(sf::Event &sfmlEvent) {
 
 	cursor.checkInput(sfmlEvent);
 	handleGuiInput(sfmlEvent);
+	handleArrowPresses(sfmlEvent);
+	
+	for (int i = 0; i < keysPressed.size(); i++) {
+		if (keysPressed[i]) {
+			switch (i) {
+			case 1:
+				gapBuffer.moveGapUp();
+				break;
+			case 2:
+				gapBuffer.moveGap(-1);
+				break;
+			case 3:
+				gapBuffer.moveGapDown();
+				break;
+			case 4:
+				gapBuffer.moveGap(1);
+				break;
+			}
+		}
+	}
 
 	if (sfmlEvent.type == sf::Event::TextEntered) {
-		if (handleKeyCombinations(sfmlEvent))
+		if (handleSpecialUnicode(sfmlEvent))
 			gapBuffer.insertText(sfmlEvent.text.unicode);	
 	}
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Left)) {
-		gapBuffer.moveGap(-1);
-	}
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right)) {
-		gapBuffer.moveGap(1);
-	}
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Up))	{
-		gapBuffer.moveGapUp();
-	}
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Down)) {
-		gapBuffer.moveGapDown();
-	}
+	
 }
 
-void TextDocument::saveToFile(std::string fileName) {
+void TextDocument::saveFile(std::string fileName) {
 	std::string text = gapBuffer.getText();
 	std::ofstream fout(fileName);
-
-	for (int i = 0; i < text.size(); i++) {
-		fout << text[i];
+	if (fout.is_open()) {
+		for (int i = 0; i < text.size(); i++) {
+			fout << text[i];
+		}
+		fout.close();
+		std::cout << "Saved!"<<std::endl;
 	}
-	fout.close();
+	else {
+		std::cout << "Destination can't be found!" << std::endl;
+	}
 }
 
 void TextDocument::openFile(std::string fileName) {
 	std::string text;
 	std::ifstream fin(fileName);
-	int i = 0;
-	while (!fin.eof()) {
-		fin >> text;
+	if (fin.is_open()) {
+		int i = 0;
+		while (!fin.eof()) {
+			std::string temp;
+			fin >> temp;
+			text += temp;
+			text += "\n";
+		}
+		gapBuffer.setText(text);
+		fin.close();
+		std::cout << "Opened file!" << std::endl;
 	}
-
-	gapBuffer.setText(text);
-	fin.close();
+	else {
+		std::cout << "Destination can't be found!" << std::endl;
+	}
 }
 
-bool TextDocument::handleKeyCombinations(sf::Event &sfmlEvent) {
+bool TextDocument::handleSpecialUnicode(sf::Event &sfmlEvent) {
+
 	switch (sfmlEvent.text.unicode) {
 	case 19:
-		saveToFile("file.txt");
+		saveFile("file.txt");
 		break;
 	case 13:
 		gapBuffer.insertText('\n');
@@ -94,10 +116,50 @@ bool TextDocument::handleKeyCombinations(sf::Event &sfmlEvent) {
 
 void TextDocument::handleGuiInput(sf::Event& sfmlEvent) {
 	switch (gui.checkInput(sfmlEvent,*pDrawingWindow)) {
+	case 1:
+		saveFile(readInputFileName());
+		break;
 	case 2:
-		saveToFile("file.txt");
+		openFile(readOutputFileName());
 		break;
 	default:
 		break;
 	}
+}
+void TextDocument::handleArrowPresses(sf::Event& sfmlEvent) {
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))
+		keysPressed[0] = 1;
+	else keysPressed[0] = 0;
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+		keysPressed[1] = 1;
+	else keysPressed[1] = 0;
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+		keysPressed[2] = 1;
+	else keysPressed[2] = 0;
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+		keysPressed[3] = 1;
+	else keysPressed[3] = 0;
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+		keysPressed[4] = 1;
+	else keysPressed[4] = 0;
+}
+
+std::string TextDocument::readOutputFileName()
+{
+	std::cout << "Enter the location of the file you want to open:";
+	std::string fileName;
+	std::cin >> fileName;
+	return fileName;
+}
+
+std::string TextDocument::readInputFileName()
+{
+	std::cout << "Enter the path where you want to save the text file:";
+	std::string fileName;
+	std::cin >> fileName;
+	return fileName;
 }

@@ -13,7 +13,6 @@ void TextEditor::draw() {
 	drawingWindow.clear(sf::Color(38,38,38));
 	drawingWindow.draw(myDoc);
 	drawingWindow.display();
-
 }
 
 void TextEditor::update() {

@@ -12,7 +12,6 @@ class TextDocument : public sf::Drawable {
 
 	sf::Font font;
 	sf::Text drawableText;
-	sf::Vector2u screenResolution;
 	sf::RenderWindow *pDrawingWindow;
 
 	GapBuffer gapBuffer;
@@ -20,12 +19,16 @@ class TextDocument : public sf::Drawable {
 	Gui gui;
 
 	GapBuffer sndGapBuffer;
-	bool highlightedText;
-	//the second gap buffer will place its gap at the second end of the highlighted text
+	std::vector<bool> keysPressed;
+	//0 = shift, 1 = up, 2 = left, 3 = down, 4 = right
 
-	void saveToFile(std::string);
-	bool handleKeyCombinations(sf::Event&);
+	void saveFile(std::string);
+	void openFile(std::string);
+	bool handleSpecialUnicode(sf::Event&);
 	void handleGuiInput(sf::Event&);
+	void handleArrowPresses(sf::Event&);
+	std::string readOutputFileName();
+	std::string readInputFileName();
 
 public:
 	TextDocument(sf::RenderWindow&);
@@ -33,7 +36,6 @@ public:
 	void draw(sf::RenderTarget&, sf::RenderStates) const;
 	void update(float);
 	void checkInput(sf::Event&);
-	void openFile(std::string);
 
 
 };

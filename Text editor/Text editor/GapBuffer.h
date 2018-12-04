@@ -14,6 +14,7 @@ class GapBuffer {
 	int preLength, postLength;
 	//the length of the text before the gap and after it
 	int gapMaxLength;
+	int nrLines;
 
 	void createGap();
 
@@ -39,6 +40,7 @@ public:
 	GapBuffer operator=(GapBuffer&);
 
 	int getPreLength() { return preLength; }
+	int getNrLines() { return nrLines; }
 
 
 };

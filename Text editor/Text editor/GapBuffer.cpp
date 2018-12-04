@@ -1,11 +1,12 @@
 #include "GapBuffer.h"
 
 GapBuffer::GapBuffer() {
-	gapMaxLength = 2048;
+	gapMaxLength = 55;
 	preLength = 0;
 	//the cursor is placed at the beginning at first;
 	createGap();
 
+	nrLines = 0;
 	postLength = 0;
 	//buffer.push_back('\0');
 }
@@ -18,14 +19,23 @@ void GapBuffer :: createGap() {
 }
 
 void GapBuffer::insertText(char text) {
-	
+	if (buffer.size() == preLength)
+		createGap();
+	if (text == '\n')
+		nrLines++;
 	buffer[preLength] = text;
 	preLength++;
+
+	//std::cout << preLength << " " << postLength << std::endl;
 }
 
 void GapBuffer::deleteText() {
-	buffer[preLength] = ' ';
-	preLength--;
+	if (preLength != 0) {
+		if (buffer[preLength] == '\n')
+			nrLines--;
+		buffer[preLength] = ' ';
+		preLength--;
+	}
 }
 
 void GapBuffer::moveGap(int direction) {
@@ -35,7 +45,6 @@ void GapBuffer::moveGap(int direction) {
 		//if we move the gap backwards, we start copying the text from pos until the gap starts at the end of the gap
 
 		direction *= -1;
-
 		if (preLength == 0)
 			return;
 
@@ -192,12 +201,17 @@ void GapBuffer::moveGapDown() {
 
 void GapBuffer::setText(std::string text) {
 
+	//emptying the buffer
+	std::vector<char> temp;		
+	buffer = temp;
+	preLength = 0;
+	postLength = 0;
+	createGap();
 
 	for (int i = 0; i < text.size(); i++)
 	{
-		buffer.insert(buffer.begin()+i+gapMaxLength,text[i]);
+		insertText(text[i]);
 	}
-	postLength += text.size();
 }
 
 int GapBuffer::getCurrLine() {

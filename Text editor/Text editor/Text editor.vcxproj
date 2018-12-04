@@ -133,7 +133,6 @@
   <ItemGroup>
     <ClInclude Include="Cursor.h" />
     <ClInclude Include="Gui.h" />
-    <ClInclude Include="ResourceHandler.h" />
     <ClInclude Include="TextDocument.h" />
     <ClInclude Include="GapBuffer.h" />
     <ClInclude Include="TextEditor.h" />

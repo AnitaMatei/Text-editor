@@ -50,8 +50,5 @@
     <ClInclude Include="Gui.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="ResourceHandler.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
   </ItemGroup>
 </Project>
