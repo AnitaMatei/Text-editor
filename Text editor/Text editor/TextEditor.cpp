@@ -10,7 +10,7 @@ TextEditor::TextEditor(int x, int y)
 }
 
 void TextEditor::draw() {
-	drawingWindow.clear(sf::Color(38,38,38));
+	drawingWindow.clear(sf::Color(40, 42, 54));
 	drawingWindow.draw(myDoc);
 	drawingWindow.display();
 }

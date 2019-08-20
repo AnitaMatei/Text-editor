@@ -3,7 +3,7 @@
 Gui::Gui(sf::Vector2u screenRes)
 	:menuBar()
 {
-	menuBar.setFillColor(sf::Color(211,211,211));
+	menuBar.setFillColor(sf::Color(68, 71, 90));
 	menuBar.setSize(sf::Vector2f(screenRes.x,20));
 	font.loadFromFile("Fonts/VeraMono.ttf");
 
@@ -14,7 +14,7 @@ Gui::Gui(sf::Vector2u screenRes)
 	menuNames[0].setFont(font);
 	menuNames[0].setCharacterSize(15);
 	menuNames[0].setString("Save");
-	menuNames[0].setFillColor(sf::Color::Black);
+	menuNames[0].setFillColor(sf::Color(102, 153, 255));
 	menuNames[0].setPosition(sf::Vector2f(0, 0));
 	menuNameBoxes.push_back(menuNames[0].getGlobalBounds());
 
@@ -22,7 +22,7 @@ Gui::Gui(sf::Vector2u screenRes)
 	menuNames[1].setFont(font);
 	menuNames[1].setCharacterSize(15);
 	menuNames[1].setString("Open");
-	menuNames[1].setFillColor(sf::Color::Black);
+	menuNames[1].setFillColor(sf::Color(102, 153, 255));
 	menuNames[1].setPosition(sf::Vector2f(menuNames[0].getLocalBounds().width+buttonSeparation, 0));
 	menuNameBoxes.push_back(menuNames[1].getGlobalBounds());
 }

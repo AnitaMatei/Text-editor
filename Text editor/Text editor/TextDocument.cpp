@@ -9,7 +9,7 @@ TextDocument::TextDocument(sf::RenderWindow& drawingWindow)
 {
 	font.loadFromFile("Fonts/VeraMono.ttf");
 	drawableText.setFont(font);
-	drawableText.setFillColor(sf::Color::White);
+	drawableText.setFillColor(sf::Color(102, 153, 153));
 	drawableText.setCharacterSize(15);
 	drawableText.setPosition(sf::Vector2f(0, 25));
 
@@ -81,10 +81,10 @@ void TextDocument::openFile(std::string fileName) {
 	if (fin.is_open()) {
 		int i = 0;
 		while (!fin.eof()) {
-			std::string temp;
-			fin >> temp;
+			//we definitely don't want to jump over white spaces, so we need to use noskipws when reading
+			char temp;
+			fin >> std::noskipws >> temp;
 			text += temp;
-			text += "\n";
 		}
 		gapBuffer.setText(text);
 		fin.close();
@@ -98,13 +98,13 @@ void TextDocument::openFile(std::string fileName) {
 bool TextDocument::handleSpecialUnicode(sf::Event &sfmlEvent) {
 
 	switch (sfmlEvent.text.unicode) {
-	case 19:
-		saveFile("file.txt");
+	case 19:	//ctrl+s
+		saveFile(readInputFileName());
 		break;
-	case 13:
+	case 13:	//space
 		gapBuffer.insertText('\n');
 		break;
-	case 8:
+	case 8:		//backspace
 		gapBuffer.deleteText();
 		break;
 	default:
