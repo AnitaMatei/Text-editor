@@ -4,13 +4,15 @@ A plain text editor with basic functions such as opening, editing and saving fil
 
 ## Created using
 
+* C++
+
 * sfml for graphics and input
 
 ## Quick visual demo
 
 ![](https://i.imgur.com/cmrC6II.gif)
 
-![](https://i.imgur.com/hcSSC2W.gif)
+![](https://i.imgur.com/gWMQrhm.gif)
 
 
 ## Credits

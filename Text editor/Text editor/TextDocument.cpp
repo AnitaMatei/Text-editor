@@ -83,8 +83,8 @@ void TextDocument::openFile(std::string fileName) {
 		while (!fin.eof()) {
 			//we definitely don't want to jump over white spaces, so we need to use noskipws when reading
 			char temp;
-			fin >> std::noskipws >> temp;
-			text += temp;
+			if(fin >> std::noskipws >> temp)
+				text += temp;
 		}
 		gapBuffer.setText(text);
 		fin.close();
