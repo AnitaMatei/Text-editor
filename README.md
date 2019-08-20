@@ -6,11 +6,12 @@ A plain text editor with basic functions such as opening, editing and saving fil
 
 * sfml for graphics and input
 
-## Gameplay Examples
+## Quick visual demo
 
-![](https://imgur.com/a/mFfLWEW)
+![](https://i.imgur.com/cmrC6II.gif)
 
-![](https://imgur.com/a/Uo6WFKu)
+![](https://i.imgur.com/hcSSC2W.gif)
+
 
 ## Credits
 
