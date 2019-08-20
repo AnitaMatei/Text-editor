@@ -17,5 +17,4 @@ A plain text editor with basic functions such as opening, editing and saving fil
 
 ## Credits
 
-https://mrbubblewand.wordpress.com/download/
-
+https://www.sfml-dev.org/
